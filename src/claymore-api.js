@@ -6,7 +6,7 @@ const request = JSON.stringify({
     method: 'miner_getstat1'
 }) + '\n';
 
-export const getStats = (host, port, timeout = 5000) => new Promise((reject, resolve) => {
+export const getStats = (host, port, timeout = 5000) => new Promise((resolve, reject) => {
     const socket = new net.Socket()
         .on('connect', () => {
             socket.write(request);
