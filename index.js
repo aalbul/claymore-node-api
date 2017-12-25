@@ -1,0 +1,1 @@
+export {getStats} from './src/claymore-api';
