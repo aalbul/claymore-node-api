@@ -6,6 +6,8 @@ const request = JSON.stringify({
     method: 'miner_getstat1'
 }) + '\n';
 
+const parseCardHashrates = (cardHashrates) => cardHashrates.split(';').map((hashrate) => (hashrate / 1000).toFixed(3));
+
 export const getStats = (host, port, timeout = 5000) => new Promise((resolve, reject) => {
     const socket = new net.Socket()
         .on('connect', () => {
@@ -17,7 +19,27 @@ export const getStats = (host, port, timeout = 5000) => new Promise((resolve, re
             socket.destroy();
         })
         .on('data', (data) => {
-            resolve(JSON.parse(data.toString().trim()));
+            [
+                claymoreVersion,
+                runningMinutes,
+                totalHashrateSharesRejected,
+                cardHashrates,
+                ,,
+                cardTemperaturesFunSpeeds
+            ] = JSON.parse(data.toString().trim());
+            const [totalHashrate, successful, rejected] = totalHashrateSharesRejected.split(';');
+            const parsedCardHashrates = parseCardHashrates(cardHashrates);
+
+            resolve({
+                claymoreVersion,
+                runningMinutes: Number(runningMinutes),
+                totalHashrate,
+                shares: {
+                    successful,
+                    rejected
+                },
+                hashRates: parsedCardHashrates
+            });
         })
         .on('error', (e) => {
             reject(e.message)
