@@ -187,12 +187,22 @@ var parseCoin = function parseCoin(stats, hashrates) {
 };
 
 var toStatsJson = exports.toStatsJson = function toStatsJson(result) {
+    var positions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+        version: 0,
+        uptime: 1,
+        ethashStats: 2,
+        ethashHr: 3,
+        dcoinStats: 4,
+        dcoinhHr: 5,
+        temperatureFanSpeeds: 6
+    };
+
     return {
-        claymoreVersion: result[0],
-        uptime: Number(result[1]),
-        ethash: parseCoin(result[2], result[3]),
-        dcoin: parseCoin(result[4], result[5]),
-        sensors: parseCardTemperaturesFunSpeeds(result[6])
+        claymoreVersion: result[positions.version],
+        uptime: positions.uptime ? Number(result[positions.uptime]) : undefined,
+        ethash: positions.ethashStats && positions.ethashHr ? parseCoin(result[positions.ethashStats], result[positions.ethashHr]) : undefined,
+        dcoin: positions.dcoinStats && positions.dcoinhHr ? parseCoin(result[positions.dcoinStats], result[positions.dcoinhHr]) : undefined,
+        sensors: positions.temperatureFanSpeeds ? parseCardTemperaturesFunSpeeds(result[positions.temperatureFanSpeeds]) : undefined
     };
 };
 
