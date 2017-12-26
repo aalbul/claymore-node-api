@@ -39,7 +39,7 @@ const parseCoin = (stats, hashrates) => Object.assign(
     {cardHashrates: parseCardHashrates(hashrates)}
 );
 
-const parseResult = (result) => {
+export const toStatsJson = (result) => {
     return {
         claymoreVersion: result[0],
         uptime: Number(result[1]),
@@ -61,7 +61,7 @@ export const getStats = (host, port, timeout = 5000) => new Promise((resolve, re
         })
         .on('data', (data) => {
             const result = JSON.parse(data.toString().trim()).result;
-            resolve(parseResult(result));
+            resolve(result);
         })
         .on('error', (e) => {
             reject(e.message)
@@ -69,3 +69,5 @@ export const getStats = (host, port, timeout = 5000) => new Promise((resolve, re
 
     socket.connect(port, host);
 });
+
+export const getStatsJson = (host, port, timeout = 5000) => getStats(host, port, timeout).then(toStatsJson);

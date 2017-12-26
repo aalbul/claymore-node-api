@@ -100,6 +100,18 @@ Object.defineProperty(exports, 'getStats', {
     return _claymoreApi.getStats;
   }
 });
+Object.defineProperty(exports, 'getStatsJson', {
+  enumerable: true,
+  get: function get() {
+    return _claymoreApi.getStatsJson;
+  }
+});
+Object.defineProperty(exports, 'toStatsJson', {
+  enumerable: true,
+  get: function get() {
+    return _claymoreApi.toStatsJson;
+  }
+});
 
 /***/ }),
 /* 2 */
@@ -116,7 +128,7 @@ Object.defineProperty(exports, 'getStats', {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.getStats = undefined;
+exports.getStatsJson = exports.getStats = exports.toStatsJson = undefined;
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -174,7 +186,7 @@ var parseCoin = function parseCoin(stats, hashrates) {
     return Object.assign({}, parseStats(stats), { cardHashrates: parseCardHashrates(hashrates) });
 };
 
-var parseResult = function parseResult(result) {
+var toStatsJson = exports.toStatsJson = function toStatsJson(result) {
     return {
         claymoreVersion: result[0],
         uptime: Number(result[1]),
@@ -195,13 +207,18 @@ var getStats = exports.getStats = function getStats(host, port) {
             socket.destroy();
         }).on('data', function (data) {
             var result = JSON.parse(data.toString().trim()).result;
-            resolve(parseResult(result));
+            resolve(result);
         }).on('error', function (e) {
             reject(e.message);
         });
 
         socket.connect(port, host);
     });
+};
+
+var getStatsJson = exports.getStatsJson = function getStatsJson(host, port) {
+    var timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5000;
+    return getStats(host, port, timeout).then(toStatsJson);
 };
 
 /***/ }),

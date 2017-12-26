@@ -1,1 +1,1 @@
-export {getStats} from './src/claymore-api';
+export {getStats, getStatsJson, toStatsJson} from './src/claymore-api';
