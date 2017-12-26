@@ -6,7 +6,48 @@ const request = JSON.stringify({
     method: 'miner_getstat1'
 }) + '\n';
 
-const parseCardHashrates = (cardHashrates) => cardHashrates.split(';').map((hashrate) => (hashrate / 1000).toFixed(3));
+const parseHashrate = (hashrate) => hashrate === 'off' ? 0 : Number(hashrate) / 1000;
+
+const parseCardHashrates = (hashrates) => hashrates.split(';').map(parseHashrate);
+
+const parseStats = (stats) => {
+    const [totalHashrate, successfulShares, rejectedShares] = stats.split(';');
+    return {
+        hashrate: parseHashrate(totalHashrate),
+        shares: {
+            successful: Number(successfulShares),
+            rejected: Number(rejectedShares)
+        }
+    }
+};
+
+const parseCardTemperaturesFunSpeeds = (temperatureFanSpeeds) => {
+    const parsed = temperatureFanSpeeds.split(';');
+    let grouped = [];
+    while (parsed.length !== 0) {
+        const temperature = parsed[0];
+        const fanSpeed = parsed[1];
+        parsed.splice(0, 2);
+        grouped = [...grouped, {temperature, fanSpeed}];
+    }
+    return grouped;
+};
+
+const parseCoin = (stats, hashrates) => Object.assign(
+    {},
+    parseStats(stats),
+    {cardHashrates: parseCardHashrates(hashrates)}
+);
+
+const parseResult = (result) => {
+    return {
+        claymoreVersion: result[0],
+        uptime: Number(result[1]),
+        ethash: parseCoin(result[2], result[3]),
+        dcoin: parseCoin(result[4], result[5]),
+        sensors: parseCardTemperaturesFunSpeeds(result[6])
+    };
+};
 
 export const getStats = (host, port, timeout = 5000) => new Promise((resolve, reject) => {
     const socket = new net.Socket()
@@ -19,27 +60,9 @@ export const getStats = (host, port, timeout = 5000) => new Promise((resolve, re
             socket.destroy();
         })
         .on('data', (data) => {
-            [
-                claymoreVersion,
-                runningMinutes,
-                totalHashrateSharesRejected,
-                cardHashrates,
-                ,,
-                cardTemperaturesFunSpeeds
-            ] = JSON.parse(data.toString().trim());
-            const [totalHashrate, successful, rejected] = totalHashrateSharesRejected.split(';');
-            const parsedCardHashrates = parseCardHashrates(cardHashrates);
-
-            resolve({
-                claymoreVersion,
-                runningMinutes: Number(runningMinutes),
-                totalHashrate,
-                shares: {
-                    successful,
-                    rejected
-                },
-                hashRates: parsedCardHashrates
-            });
+            const result = JSON.parse(data.toString().trim()).result;
+            console.log(result);
+            resolve(parseResult(result));
         })
         .on('error', (e) => {
             reject(e.message)
