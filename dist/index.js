@@ -1,1 +1,220 @@
-module.exports=function(t){function e(n){if(r[n])return r[n].exports;var o=r[n]={i:n,l:!1,exports:{}};return t[n].call(o.exports,o,o.exports,e),o.l=!0,o.exports}var r={};return e.m=t,e.c=r,e.d=function(t,r,n){e.o(t,r)||Object.defineProperty(t,r,{configurable:!1,enumerable:!0,get:n})},e.n=function(t){var r=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(r,"a",r),r},e.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},e.p="/",e(e.s=0)}([function(t,e,r){t.exports=r(1)},function(t,e,r){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var n=r(2);Object.defineProperty(e,"getStats",{enumerable:!0,get:function(){return n.getStats}})},function(t,e,r){"use strict";function n(t){if(Array.isArray(t)){for(var e=0,r=Array(t.length);e<t.length;e++)r[e]=t[e];return r}return Array.from(t)}Object.defineProperty(e,"__esModule",{value:!0}),e.getStats=void 0;var o=function(){function t(t,e){var r=[],n=!0,o=!1,u=void 0;try{for(var i,a=t[Symbol.iterator]();!(n=(i=a.next()).done)&&(r.push(i.value),!e||r.length!==e);n=!0);}catch(t){o=!0,u=t}finally{try{!n&&a.return&&a.return()}finally{if(o)throw u}}return r}return function(e,r){if(Array.isArray(e))return e;if(Symbol.iterator in Object(e))return t(e,r);throw new TypeError("Invalid attempt to destructure non-iterable instance")}}(),u=r(3),i=function(t){return t&&t.__esModule?t:{default:t}}(u),a=JSON.stringify({id:0,jsonrpc:"2.0",method:"miner_getstat1"})+"\n",c=function(t){return"off"===t?0:Number(t)/1e3},s=function(t){return t.split(";").map(c)},f=function(t){var e=t.split(";"),r=o(e,3),n=r[0],u=r[1],i=r[2];return{hashrate:c(n),shares:{successful:Number(u),rejected:Number(i)}}},l=function(t){for(var e=t.split(";"),r=[];0!==e.length;){var o=e[0],u=e[1];e.splice(0,2),r=[].concat(n(r),[{temperature:o,fanSpeed:u}])}return r},d=function(t,e){return Object.assign({},f(t),{cardHashrates:s(e)})},p=function(t){return{claymoreVersion:t[0],uptime:Number(t[1]),ethash:d(t[2],t[3]),dcoin:d(t[4],t[5]),sensors:l(t[6])}};e.getStats=function(t,e){var r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:5e3;return new Promise(function(n,o){var u=(new i.default.Socket).on("connect",function(){u.write(a),u.setTimeout(r)}).on("timeout",function(){o("Claymore didnt answer within "+r+"ms."),u.destroy()}).on("data",function(t){var e=JSON.parse(t.toString().trim()).result;console.log(e),n(p(e))}).on("error",function(t){o(t.message)});u.connect(e,t)})}},function(t,e){t.exports=require("net")}]);
+module.exports =
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/*!************************!*\
+  !*** multi ./index.js ***!
+  \************************/
+/*! dynamic exports provided */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! /Users/aalbul/Documents/projects/self-dev/claymore-node-api/index.js */1);
+
+
+/***/ }),
+/* 1 */
+/*!******************!*\
+  !*** ./index.js ***!
+  \******************/
+/*! dynamic exports provided */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _claymoreApi = __webpack_require__(/*! ./src/claymore-api */ 2);
+
+Object.defineProperty(exports, 'getStats', {
+  enumerable: true,
+  get: function get() {
+    return _claymoreApi.getStats;
+  }
+});
+
+/***/ }),
+/* 2 */
+/*!*****************************!*\
+  !*** ./src/claymore-api.js ***!
+  \*****************************/
+/*! dynamic exports provided */
+/*! all exports used */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getStats = undefined;
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _net = __webpack_require__(/*! net */ 3);
+
+var _net2 = _interopRequireDefault(_net);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var request = JSON.stringify({
+    id: 0,
+    jsonrpc: '2.0',
+    method: 'miner_getstat1'
+}) + '\n';
+
+var parseHashrate = function parseHashrate(hashrate) {
+    return hashrate === 'off' ? 0 : Number(hashrate) / 1000;
+};
+
+var parseCardHashrates = function parseCardHashrates(hashrates) {
+    return hashrates.split(';').map(parseHashrate);
+};
+
+var parseStats = function parseStats(stats) {
+    var _stats$split = stats.split(';'),
+        _stats$split2 = _slicedToArray(_stats$split, 3),
+        totalHashrate = _stats$split2[0],
+        successfulShares = _stats$split2[1],
+        rejectedShares = _stats$split2[2];
+
+    return {
+        hashrate: parseHashrate(totalHashrate),
+        shares: {
+            successful: Number(successfulShares),
+            rejected: Number(rejectedShares)
+        }
+    };
+};
+
+var parseCardTemperaturesFunSpeeds = function parseCardTemperaturesFunSpeeds(temperatureFanSpeeds) {
+    var parsed = temperatureFanSpeeds.split(';');
+    var grouped = [];
+    while (parsed.length !== 0) {
+        var temperature = parsed[0];
+        var fanSpeed = parsed[1];
+        parsed.splice(0, 2);
+        grouped = [].concat(_toConsumableArray(grouped), [{ temperature: temperature, fanSpeed: fanSpeed }]);
+    }
+    return grouped;
+};
+
+var parseCoin = function parseCoin(stats, hashrates) {
+    return Object.assign({}, parseStats(stats), { cardHashrates: parseCardHashrates(hashrates) });
+};
+
+var parseResult = function parseResult(result) {
+    return {
+        claymoreVersion: result[0],
+        uptime: Number(result[1]),
+        ethash: parseCoin(result[2], result[3]),
+        dcoin: parseCoin(result[4], result[5]),
+        sensors: parseCardTemperaturesFunSpeeds(result[6])
+    };
+};
+
+var getStats = exports.getStats = function getStats(host, port) {
+    var timeout = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 5000;
+    return new Promise(function (resolve, reject) {
+        var socket = new _net2.default.Socket().on('connect', function () {
+            socket.write(request);
+            socket.setTimeout(timeout);
+        }).on('timeout', function () {
+            reject('Claymore didnt answer within ' + timeout + 'ms.');
+            socket.destroy();
+        }).on('data', function (data) {
+            var result = JSON.parse(data.toString().trim()).result;
+            console.log(result);
+            resolve(parseResult(result));
+        }).on('error', function (e) {
+            reject(e.message);
+        });
+
+        socket.connect(port, host);
+    });
+};
+
+/***/ }),
+/* 3 */
+/*!**********************!*\
+  !*** external "net" ***!
+  \**********************/
+/*! dynamic exports provided */
+/*! all exports used */
+/***/ (function(module, exports) {
+
+module.exports = require("net");
+
+/***/ })
+/******/ ]);

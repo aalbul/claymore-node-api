@@ -1,5 +1,5 @@
 module.exports = {
-    minimize: true,
+    minimize: false,
     filename: {js: 'index.js'},
     hash: false,
     sourceMap: 'eval-source-map',
