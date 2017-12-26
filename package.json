@@ -1,8 +1,11 @@
 {
   "name": "claymore-node-api",
   "version": "0.1",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "dependencies": {},
+  "directories": {
+    "lib": "dist"
+  },
   "devDependencies": {
     "babel-core": "6.26.0",
     "babel-preset-env": "1.6.1",
