@@ -195,7 +195,6 @@ var getStats = exports.getStats = function getStats(host, port) {
             socket.destroy();
         }).on('data', function (data) {
             var result = JSON.parse(data.toString().trim()).result;
-            console.log(result);
             resolve(parseResult(result));
         }).on('error', function (e) {
             reject(e.message);

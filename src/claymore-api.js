@@ -61,7 +61,6 @@ export const getStats = (host, port, timeout = 5000) => new Promise((resolve, re
         })
         .on('data', (data) => {
             const result = JSON.parse(data.toString().trim()).result;
-            console.log(result);
             resolve(parseResult(result));
         })
         .on('error', (e) => {
