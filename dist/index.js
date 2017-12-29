@@ -173,11 +173,13 @@ var parseStats = function parseStats(stats) {
 var parseCardTemperaturesFunSpeeds = function parseCardTemperaturesFunSpeeds(temperatureFanSpeeds) {
     var parsed = temperatureFanSpeeds.split(';');
     var grouped = [];
+    var index = 0;
     while (parsed.length !== 0) {
         var temperature = parsed[0];
         var fanSpeed = parsed[1];
         parsed.splice(0, 2);
-        grouped = [].concat(_toConsumableArray(grouped), [{ temperature: temperature, fanSpeed: fanSpeed }]);
+        grouped = [].concat(_toConsumableArray(grouped), [{ index: index, temperature: temperature, fanSpeed: fanSpeed }]);
+        index++;
     }
     return grouped;
 };

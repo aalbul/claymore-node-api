@@ -24,11 +24,13 @@ const parseStats = (stats) => {
 const parseCardTemperaturesFunSpeeds = (temperatureFanSpeeds) => {
     const parsed = temperatureFanSpeeds.split(';');
     let grouped = [];
+    let index = 0;
     while (parsed.length !== 0) {
         const temperature = parsed[0];
         const fanSpeed = parsed[1];
         parsed.splice(0, 2);
-        grouped = [...grouped, {temperature, fanSpeed}];
+        grouped = [...grouped, {index, temperature, fanSpeed}];
+        index++;
     }
     return grouped;
 };
