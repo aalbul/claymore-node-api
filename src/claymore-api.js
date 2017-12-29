@@ -26,8 +26,8 @@ const parseCardTemperaturesFunSpeeds = (temperatureFanSpeeds) => {
     let grouped = [];
     let index = 0;
     while (parsed.length !== 0) {
-        const temperature = parsed[0];
-        const fanSpeed = parsed[1];
+        const temperature = Number(parsed[0]);
+        const fanSpeed = Number(parsed[1]);
         parsed.splice(0, 2);
         grouped = [...grouped, {index, temperature, fanSpeed}];
         index++;
