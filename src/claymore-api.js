@@ -46,7 +46,7 @@ const parsePoolSwitches = (aggregatedStatsPosition, result) => {
         return [];
     }
     const [,ethPoolSwitches,,dcoinPoolSwitches] = result[aggregatedStatsPosition].split(';');
-    return [ethPoolSwitches, dcoinPoolSwitches];
+    return [Number(ethPoolSwitches), Number(dcoinPoolSwitches)];
 };
 
 export const toStatsJson = (result, positions = {

@@ -198,7 +198,7 @@ var parsePoolSwitches = function parsePoolSwitches(aggregatedStatsPosition, resu
         ethPoolSwitches = _result$aggregatedSta2[1],
         dcoinPoolSwitches = _result$aggregatedSta2[3];
 
-    return [ethPoolSwitches, dcoinPoolSwitches];
+    return [Number(ethPoolSwitches), Number(dcoinPoolSwitches)];
 };
 
 var toStatsJson = exports.toStatsJson = function toStatsJson(result) {
