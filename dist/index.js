@@ -184,8 +184,21 @@ var parseCardTemperaturesFunSpeeds = function parseCardTemperaturesFunSpeeds(tem
     return grouped;
 };
 
-var parseCoin = function parseCoin(stats, hashrates) {
-    return Object.assign({}, parseStats(stats), { cardHashrates: parseCardHashrates(hashrates) });
+var parseCoin = function parseCoin(stats, hashrates, pool, poolSwitches) {
+    return Object.assign({}, parseStats(stats), { cardHashrates: parseCardHashrates(hashrates), pool: pool, poolSwitches: poolSwitches });
+};
+
+var parsePoolSwitches = function parsePoolSwitches(aggregatedStatsPosition, result) {
+    if (!aggregatedStatsPosition) {
+        return [];
+    }
+
+    var _result$aggregatedSta = result[aggregatedStatsPosition].split(';'),
+        _result$aggregatedSta2 = _slicedToArray(_result$aggregatedSta, 4),
+        ethPoolSwitches = _result$aggregatedSta2[1],
+        dcoinPoolSwitches = _result$aggregatedSta2[3];
+
+    return [ethPoolSwitches, dcoinPoolSwitches];
 };
 
 var toStatsJson = exports.toStatsJson = function toStatsJson(result) {
@@ -196,14 +209,19 @@ var toStatsJson = exports.toStatsJson = function toStatsJson(result) {
         ethashHr: 3,
         dcoinStats: 4,
         dcoinhHr: 5,
-        temperatureFanSpeeds: 6
+        temperatureFanSpeeds: 6,
+        pools: 7,
+        aggregatedStats: 8
     };
+
+    var pools = positions.pools ? result[positions.pools].split(';') : [];
+    var poolSwitches = parsePoolSwitches(positions.aggregatedStats, result);
 
     return {
         claymoreVersion: result[positions.version],
         uptime: positions.uptime ? Number(result[positions.uptime]) : undefined,
-        ethash: positions.ethashStats && positions.ethashHr ? parseCoin(result[positions.ethashStats], result[positions.ethashHr]) : undefined,
-        dcoin: positions.dcoinStats && positions.dcoinhHr ? parseCoin(result[positions.dcoinStats], result[positions.dcoinhHr]) : undefined,
+        ethash: positions.ethashStats && positions.ethashHr ? parseCoin(result[positions.ethashStats], result[positions.ethashHr], pools[0], poolSwitches[0]) : undefined,
+        dcoin: positions.dcoinStats && positions.dcoinhHr ? parseCoin(result[positions.dcoinStats], result[positions.dcoinhHr], pools[1], poolSwitches[1]) : undefined,
         sensors: positions.temperatureFanSpeeds ? parseCardTemperaturesFunSpeeds(result[positions.temperatureFanSpeeds]) : undefined
     };
 };

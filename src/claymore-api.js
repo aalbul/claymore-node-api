@@ -35,11 +35,19 @@ const parseCardTemperaturesFunSpeeds = (temperatureFanSpeeds) => {
     return grouped;
 };
 
-const parseCoin = (stats, hashrates) => Object.assign(
+const parseCoin = (stats, hashrates, pool, poolSwitches) => Object.assign(
     {},
     parseStats(stats),
-    {cardHashrates: parseCardHashrates(hashrates)}
+    {cardHashrates: parseCardHashrates(hashrates), pool, poolSwitches}
 );
+
+const parsePoolSwitches = (aggregatedStatsPosition, result) => {
+    if (!aggregatedStatsPosition) {
+        return [];
+    }
+    const [,ethPoolSwitches,,dcoinPoolSwitches] = result[aggregatedStatsPosition].split(';');
+    return [ethPoolSwitches, dcoinPoolSwitches];
+};
 
 export const toStatsJson = (result, positions = {
     version: 0,
@@ -48,15 +56,20 @@ export const toStatsJson = (result, positions = {
     ethashHr: 3,
     dcoinStats: 4,
     dcoinhHr: 5,
-    temperatureFanSpeeds: 6
+    temperatureFanSpeeds: 6,
+    pools: 7,
+    aggregatedStats: 8
 }) => {
+    const pools = positions.pools ? result[positions.pools].split(';') : [];
+    const poolSwitches = parsePoolSwitches(positions.aggregatedStats, result);
+
     return {
         claymoreVersion: result[positions.version],
         uptime: positions.uptime ? Number(result[positions.uptime]) : undefined,
         ethash: positions.ethashStats && positions.ethashHr ?
-            parseCoin(result[positions.ethashStats], result[positions.ethashHr]) : undefined,
+            parseCoin(result[positions.ethashStats], result[positions.ethashHr], pools[0], poolSwitches[0]) : undefined,
         dcoin: positions.dcoinStats && positions.dcoinhHr ?
-            parseCoin(result[positions.dcoinStats], result[positions.dcoinhHr]) : undefined,
+            parseCoin(result[positions.dcoinStats], result[positions.dcoinhHr], pools[1], poolSwitches[1]) : undefined,
         sensors: positions.temperatureFanSpeeds ?
             parseCardTemperaturesFunSpeeds(result[positions.temperatureFanSpeeds]) : undefined
     };
